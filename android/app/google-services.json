@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "156202813585",
+    "project_id": "busti007-007",
+    "storage_bucket": "busti007-007.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156202813585:android:0a08c8ba18657fa7be1730",
+        "android_client_info": {
+          "package_name": "com.example.busti007"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "156202813585-sarjjbfn4d7b98326bj73nat1cmlanps.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDN69Yj4_lTNB8ryTLJ_GvujFGZIu0qxag"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "156202813585-sarjjbfn4d7b98326bj73nat1cmlanps.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
