@@ -1,4 +1,6 @@
 import 'package:busti007/screens/login_passenger.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPassenger extends StatelessWidget {
@@ -6,8 +8,7 @@ class SignUpPassenger extends StatelessWidget {
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +46,33 @@ class SignUpPassenger extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                // Perform registration logic here
+                Map<String,dynamic> dataToSave={
+                  'Name': nameController.text,
+                  'Phone Number': phoneNumberController.text,
+                  'Email': emailController.text,
+                  'Password': passwordController.text
+                  //'Confirm Password': passwordController.text,
 
-                // After registration, navigate to the login page
-                Navigator.push(
+                };
+
+                FirebaseFirestore.instance.collection('User').add(dataToSave);
+
+                // Perform registration logic here
+                FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text, ).then((value) {
+                  print("Create new account");
+                  Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LoginScreen1()),
                 );
+                }).onError((error, stackTrace) {
+                  print("Error ${error.toString()}");
+                });
+
+                // After registration, navigate to the login page
+                //Navigator.push(
+                  //context,
+                  //MaterialPageRoute(builder: (context) => LoginScreen1()),
+                //);
               },
               child: const Text('Register'),
             ),

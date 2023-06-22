@@ -1,10 +1,15 @@
+//import 'dart:html';
+
 import 'package:busti007/screens/signup_passenger.dart';
+import 'package:busti007/screens/welcome.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen1 extends StatelessWidget {
    LoginScreen1({Key? key}) : super(key: key);
 
-final _phoneController = TextEditingController();
+final _emailController = TextEditingController();
 final _passwordController = TextEditingController();
 
   @override
@@ -18,10 +23,10 @@ final _passwordController = TextEditingController();
               height: 150,
             ),
             TextFormField(
-              controller: _phoneController,
-              keyboardType: TextInputType.phone,
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(
-                labelText: 'Phone Number',
+                labelText: 'Email',
                 border: OutlineInputBorder(),
               ),
             ),//text field for username
@@ -69,8 +74,13 @@ final _passwordController = TextEditingController();
                 ),
               ),
             ElevatedButton.icon(onPressed: () {
-              checkLogin(context);
-
+              FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailController.text, password: _passwordController.text).then((value) {
+                Navigator.push(context,
+               MaterialPageRoute(builder: (context) => WelcomeScreen()));
+              }).onError((error, stackTrace) {
+                print("Error ${error.toString()}");
+              });
+              
             }, 
             icon: const Icon(Icons.check), 
             label: const Text('Login'))
@@ -80,23 +90,5 @@ final _passwordController = TextEditingController();
       ),
     );
   }
-  void checkLogin(BuildContext ctx)
-  {
-    final _phone = _phoneController.text;
-    final _password = _passwordController.text;
-    if (_phone.isNotEmpty && _password.isNotEmpty) {
-    if (_phone == _password) {
-      // Go to homepage
-    } else {
-      final _errorMessage = 'User not registered';
-      ScaffoldMessenger.of(ctx).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.all(10),
-          content: Text(_errorMessage),
-        ),
-      );
-    }
-  }
-  }
+
 }
