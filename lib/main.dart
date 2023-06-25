@@ -2,6 +2,9 @@ import 'package:busti007/screens/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+
+const SAVE_KEY_NAME = 'UserLoggedIn';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

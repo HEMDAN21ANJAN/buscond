@@ -1,3 +1,4 @@
+import 'package:busti007/main.dart';
 import 'package:busti007/screens/forgootpassword.dart';
 import 'package:busti007/screens/homescreen.dart';
 import 'package:busti007/screens/signup_passenger.dart';
@@ -5,6 +6,7 @@ import 'package:busti007/screens/welcome.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen1 extends StatelessWidget {
   LoginScreen1({Key? key}) : super(key: key);
@@ -102,8 +104,10 @@ class LoginScreen1 extends StatelessWidget {
                       .signInWithEmailAndPassword(
                           email: _emailController.text,
                           password: _passwordController.text)
-                      .then((value) {
-                    Navigator.push(
+                      .then((value) async {
+                        final _sharedPrefs = await SharedPreferences.getInstance();
+                        await _sharedPrefs.setBool(SAVE_KEY_NAME, true);
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => HomePage()),
                     );

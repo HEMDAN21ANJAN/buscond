@@ -1,5 +1,7 @@
 import 'package:busti007/screens/login_passenger.dart';
+import 'package:busti007/screens/welcome.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -29,13 +31,23 @@ class HomePage extends StatelessWidget {
         child: ElevatedButton(
           child: Text('Go to Login'),
           onPressed: () {
-            Navigator.push(context,MaterialPageRoute(
-                      builder: (context) => LoginScreen1(),
-                    ),
-                     );
+            signout(context);
+            // Navigator.push(context,MaterialPageRoute(
+            //           builder: (context) => LoginScreen1(),
+            //         ),
+            //          );
           },
         ),
       ),
     );
+  }
+
+
+  signout(BuildContext ctx) async
+  {
+    final _sharedPrefs = await SharedPreferences.getInstance();
+    await _sharedPrefs.clear();
+    Navigator.of(ctx).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (ctx1) => WelcomeScreen()), (route) => false);
   }
 }

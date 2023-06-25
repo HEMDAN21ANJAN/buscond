@@ -41,7 +41,7 @@ dependencies:
   country_picker: ^2.0.20
   cloud_firestore: ^4.8.0
   provider: ^6.0.5
-  shared_preferences: ^2.1.1
+  shared_preferences: ^2.1.2
   image_picker: ^0.8.7+5
   firebase_storage: ^11.2.2
   fluttertoast: ^8.2.2
