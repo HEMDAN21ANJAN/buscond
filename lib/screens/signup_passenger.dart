@@ -46,32 +46,45 @@ class SignUpPassenger extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                Map<String,dynamic> dataToSave={
+                // Check if the password and confirm password match
+                if (passwordController.text != confirmPasswordController.text) {
+                  print("Password do not match");
+                  return;
+                }
+
+                // Create a document with phone number as the document ID
+                final phoneNumber = phoneNumberController.text;
+                final userData = {
                   'Name': nameController.text,
-                  'Phone Number': phoneNumberController.text,
+                  'Phone Number': phoneNumber,
                   'Email': emailController.text,
-                  'Password': passwordController.text
-                  //'Confirm Password': passwordController.text,
-
+                  'Password': passwordController.text,
                 };
-
-                FirebaseFirestore.instance.collection('User').add(dataToSave);
+                FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(phoneNumber)
+                    .set(userData);
 
                 // Perform registration logic here
-                FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text, ).then((value) {
+                FirebaseAuth.instance
+                    .createUserWithEmailAndPassword(
+                  email: emailController.text,
+                  password: passwordController.text,
+                )
+                    .then((value) {
                   print("Create new account");
                   Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginScreen1()),
-                );
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen1()),
+                  );
                 }).onError((error, stackTrace) {
                   print("Error ${error.toString()}");
                 });
 
                 // After registration, navigate to the login page
                 //Navigator.push(
-                  //context,
-                  //MaterialPageRoute(builder: (context) => LoginScreen1()),
+                //context,
+                //MaterialPageRoute(builder: (context) => LoginScreen1()),
                 //);
               },
               child: const Text('Register'),
