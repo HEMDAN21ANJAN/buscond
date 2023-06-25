@@ -53,18 +53,15 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
 
-  Future<void> checkUserLoggedin() async{
-    final _sharedPrefs = await SharedPreferences.getInstance();
-    final _userLoggedIn = _sharedPrefs.getBool(SAVE_KEY_NAME);
-    if (_userLoggedIn == null || _userLoggedIn == false)
-    {
+  Future<void> checkUserLoggedin() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? documentId = prefs.getString('documentId');
+
+    if (documentId == null) {
       gotoLogin();
-      final _sharedPrefs = await SharedPreferences.getInstance();
-    }
-    else
-    {
+    } else {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (ctx1) => HomePage()));
+        MaterialPageRoute(builder: (ctx1) => HomePage()),);
     }
   }
 }

@@ -12,6 +12,7 @@ class SignUpPassenger extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String userId;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Passenger Registration'),
@@ -60,6 +61,7 @@ class SignUpPassenger extends StatelessWidget {
                   'Email': emailController.text,
                   'Password': passwordController.text,
                 };
+                
                 FirebaseFirestore.instance
                     .collection('users')
                     .doc(phoneNumber)
@@ -72,6 +74,17 @@ class SignUpPassenger extends StatelessWidget {
                   password: passwordController.text,
                 )
                     .then((value) {
+                      userId = value.user!.uid;
+                      print(userId);
+                       final userMapData = {
+                    'Phone Number': phoneNumber,
+                  };
+
+                  FirebaseFirestore.instance
+                      .collection('usermap')
+                      .doc(userId)
+                      .set(userMapData);
+
                   print("Create new account");
                   Navigator.push(
                     context,
