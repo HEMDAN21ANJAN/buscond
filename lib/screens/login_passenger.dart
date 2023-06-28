@@ -13,7 +13,10 @@ class LoginScreen1 extends StatelessWidget {
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
+  Future<void> _storeDocumentIdInSharedPreferences(String documentId) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('documentId', documentId);
+  }
   void _showSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
@@ -104,14 +107,17 @@ class LoginScreen1 extends StatelessWidget {
                       .signInWithEmailAndPassword(
                           email: _emailController.text,
                           password: _passwordController.text)
-                      .then((value) async {
-                        final _sharedPrefs = await SharedPreferences.getInstance();
-                        await _sharedPrefs.setBool(SAVE_KEY_NAME, true);
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                  }).onError((error, stackTrace) {
+                      .then((value) {
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      final documentId = user.uid;
+                      _storeDocumentIdInSharedPreferences(documentId);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
+                    }
+                  }).catchError((error) {
                     _showSnackBar(context, 'Password do not match.');
                     print("Error ${error.toString()}");
                   });
