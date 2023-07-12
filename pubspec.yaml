@@ -48,6 +48,12 @@ dependencies:
   get: ^4.6.5
   qr_flutter: ^4.1.0
   barcode_image: ^2.0.3
+  qr_code_utils: ^0.0.1
+  qr: ^3.0.1
+  pdf: ^3.10.4
+  path_provider: ^2.0.15
+  http: ^1.1.0
+  open_file: ^3.3.2
 
 dev_dependencies:
   flutter_test:

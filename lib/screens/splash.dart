@@ -12,6 +12,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final TextEditingController busIDController = TextEditingController();
 
 @override
   void initState() {   // splash screen initial 
@@ -57,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
       gotoLogin();
     } else {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (ctx1) => ConductorHomePage()),);
+        MaterialPageRoute(builder: (ctx1) => ConductorHomePage(busID: busIDController.text)),);
     }
   }
 }

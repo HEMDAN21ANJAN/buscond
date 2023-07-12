@@ -1,9 +1,12 @@
-import 'dart:ui';
-
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:qr/qr.dart';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:path/path.dart' as path;
 import 'login_conductor.dart';
 
 class SignUpConductor extends StatefulWidget {
@@ -27,6 +30,62 @@ class _SignUpConductorState extends State<SignUpConductor> {
     super.dispose();
   }
 
+
+
+void generateAndUploadQRCode(String busID) async {
+  try {
+    // Generate the QR code data
+    String qrCodeData = '$busID';
+
+    // Create a QR code image
+    final qrCode = QrPainter(
+      data: qrCodeData,
+      version: QrVersions.auto,
+      gapless: true,
+    );
+
+    // Render the QR code to an image
+    final ui.Image qrCodeImage = await qrCode.toImage(400);
+
+    // Convert the image to bytes
+    final ByteData? byteData = await qrCodeImage.toByteData(format: ui.ImageByteFormat.png);
+    final Uint8List qrCodeBytes = byteData!.buffer.asUint8List();
+
+    // Upload the QR code image to Firestore
+    final storageReference = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('qr_codes')
+        .child('$busID.png');
+
+    final uploadTask = storageReference.putData(qrCodeBytes);
+    await uploadTask;
+
+    // Get the download URL of the uploaded QR code
+    final downloadURL = await storageReference.getDownloadURL();
+
+    // Update the conductor document in Firestore with the QR code download URL
+    await FirebaseFirestore.instance.collection('conductors').doc(busID).update({
+      'qrCode': downloadURL,
+    });
+
+    // Registration successful
+    // Navigate to the login page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginScreen(),
+      ),
+    );
+  } catch (error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Registration failed: ${error.toString()}'),
+      ),
+    );
+  }
+}
+
+
   void registerConductor(BuildContext context) async {
     try {
       String busID = busIDController.text;
@@ -43,35 +102,15 @@ class _SignUpConductorState extends State<SignUpConductor> {
         return;
       }
 
-      // Generate QR code with busID
-      // final qrCode = QrImage(
-      //   data: busID,
-      //   version: QrVersions.auto,
-      //   size: 200.0,
-      //   gapless: false,
-      // );
-
-      // Convert the QR code to a Uint8List
-      // final image = await qrCode.toImage();
-      // final qrCodeByteData = await image.toByteData(format: ImageByteFormat.png);
-      // final qrCodeImage = qrCodeByteData.buffer.asUint8List();
-
       // Register the conductor in Firestore
       await FirebaseFirestore.instance.collection('conductors').doc(busID).set({
         'phoneNumber': phoneNumber,
         'busID': busID,
         'password': password,
-        //'qrCode': qrCodeImage, // Add the QR code to the Firestore document
       });
 
-      // Registration successful
-      // Navigate to the login page
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginScreen(),
-        ),
-      );
+      // Generate and upload the QR code
+      generateAndUploadQRCode(busID);
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
