@@ -1,6 +1,5 @@
-import 'package:busti007/screens/login_conductor.dart';
-import 'package:busti007/screens/login_passenger.dart';
 import 'package:flutter/material.dart';
+import 'login_conductor.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -29,10 +28,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginScreen1()),
-                );
                 selectOption('passenger');
               },
               child: const Text('Passenger'),
@@ -42,7 +37,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginScreen2()),
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
                 );
                 selectOption('conductor');
                 
