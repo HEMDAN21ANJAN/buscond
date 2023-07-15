@@ -1,13 +1,13 @@
 import 'dart:io';
+import 'package:busti007/screens/route_name.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:open_file/open_file.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path_provider/path_provider.dart';
-
+import 'package:busti007/screens/routes_selection.dart';
 import 'liveticket.dart';
-import 'qrcode.dart';
 import 'routes_selection.dart';
 import 'welcome.dart';
 
@@ -107,7 +107,7 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
                       Image.network(
                         qrCodeImageUrl,
                         width: 200, // Adjust the width to make the image larger
-                        height: 100, // Adjust the height to make the image larger
+                        height: 80, // Adjust the height to make the image larger
                         fit: BoxFit.contain,
                       ),
                     ElevatedButton(
@@ -167,23 +167,13 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => RouteSelectionPage(),
+                    builder: (context) => RouteManagement(busID: widget.busID,)
                   ),
                 );
               },
-              child: Text('Select Routes & Fares'),
+              child: Text('Route Management'),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => QRCodePage(),
-                  ),
-                );
-              },
-              child: Text('QR Code'),
-            ),
+            
           ],
         ),
       ),
